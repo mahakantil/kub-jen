@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CRED = credentials('dockerhub-credentials')
+        // Yahan dockerhub-credentials ko badal kar kub-cred kar dein
+        DOCKERHUB_CRED = credentials('kub-cred')
         IMAGE_NAME = 'YOUR_DOCKERHUB_USERNAME/my-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
