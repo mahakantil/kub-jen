@@ -22,7 +22,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'kub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     bat "if not exist \"%WORKSPACE%\\.docker\" mkdir \"%WORKSPACE%\\.docker\""
                     bat "echo {\"credsStore\":\"\"} > \"%WORKSPACE%\\.docker\\config.json\""
-                    bat "echo %DOCKER_PASS%| \"${DOCKER_BIN}\" --config \"%WORKSPACE%\\.docker\" login -u %DOCKER_USER% --password-stdin"
+                    bat "echo %DOCKER_PASS%| \"${DOCKER_BIN}\" --config \"%WORKSPACE%\\.docker\" login -u mahakantil10 --password-stdin"
                     bat "\"${DOCKER_BIN}\" --config \"%WORKSPACE%\\.docker\" push %IMAGE_NAME%:%IMAGE_TAG%"
                     bat "\"${DOCKER_BIN}\" --config \"%WORKSPACE%\\.docker\" push %IMAGE_NAME%:latest"
                 }
