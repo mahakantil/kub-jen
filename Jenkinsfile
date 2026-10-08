@@ -1,15 +1,15 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CRED = credentials('kub-cred')[cite: 5]
-        IMAGE_NAME = 'mahakantil/my-app'
+        DOCKERHUB_CRED = credentials('kub-cred')
+        IMAGE_NAME = 'mahakantil10/my-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         DOCKER_BIN = 'C:\\Users\\mycom\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
     }
     stages {
-        stage('1. Pull Code from GitHub') {
+        stage('1. Pull Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/mahakantil/kub-jen.git'[cite: 4, 5]
+                git branch: 'main', url: 'https://github.com/mahakantil/kub-jen.git'
             }
         }
         stage('2. Build Docker Image') {
@@ -25,7 +25,7 @@ pipeline {
                 bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:latest"
             }
         }
-        stage('4. Deploy to Kubernetes from DockerHub') {
+        stage('4. Deploy to Kubernetes') {
             steps {
                 bat "kubectl set image deployment/my-app-deployment my-app-container=%IMAGE_NAME%:%IMAGE_TAG%"
                 bat "kubectl rollout status deployment/my-app-deployment"
