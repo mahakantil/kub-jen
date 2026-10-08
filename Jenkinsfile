@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CRED = credentials('kub-cred')
         IMAGE_NAME = 'mahakantil10/my-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         DOCKER_BIN = 'C:\\Users\\mycom\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
@@ -20,9 +19,11 @@ pipeline {
         }
         stage('3. Push Image to DockerHub') {
             steps {
-                bat "echo %DOCKERHUB_CRED_PSW% | \"${DOCKER_BIN}\" login -u %DOCKERHUB_CRED_USR% --password-stdin"
-                bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:%IMAGE_TAG%"
-                bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:latest"
+                withCredentials([usernamePassword(credentialsId: 'kub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    bat "\"${DOCKER_BIN}\" login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                    bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:%IMAGE_TAG%"
+                    bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:latest"
+                }
             }
         }
         stage('4. Deploy to Kubernetes') {
