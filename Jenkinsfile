@@ -20,7 +20,7 @@ pipeline {
         stage('3. Push Image to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'kub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat "\"${DOCKER_BIN}\" login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                    bat "echo %DOCKER_PASS%| \"${DOCKER_BIN}\" login -u %DOCKER_USER% --password-stdin"
                     bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:%IMAGE_TAG%"
                     bat "\"${DOCKER_BIN}\" push %IMAGE_NAME%:latest"
                 }
